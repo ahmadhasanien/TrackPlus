@@ -25,9 +25,9 @@ const adminNavIcons: Record<string, () => ReactElement> = {
   departments: DepartmentsIcon,
 };
 
-export type PageId = 'dashboard' | 'companies' | 'tenants' | 'subscriptions' | 'audit-log';
+export type PageId = 'dashboard' | 'companies' | 'tenants' | 'subscriptions' | 'audit-log' | 'goals' | 'projects' | 'departments';
 
-const ADMIN_ROUTABLE_PAGES: PageId[] = ['dashboard', 'companies'];
+const ADMIN_ROUTABLE_PAGES: PageId[] = ['dashboard', 'companies', 'goals'];
 
 interface SuperadminNavItem {
   id: PageId;
@@ -48,6 +48,9 @@ interface SidebarProps {
   onNavigate: (page: PageId) => void;
   
   onSignOut?: () => void;
+  profile?: { name: string; role: string; initial: string };
+  settingsActive?: boolean;
+  onSettings?: () => void;
 }
 
 interface SignOutModalProps {
@@ -115,7 +118,7 @@ function SignOutModal({ onConfirm, onCancel }: SignOutModalProps) {
   );
 }
 
-export function Sidebar({ role, activePage, onNavigate, onSignOut }: SidebarProps) {
+export function Sidebar({ role, activePage, onNavigate, onSignOut, profile, settingsActive = false, onSettings }: SidebarProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showSignOutModal, setShowSignOutModal] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -177,7 +180,11 @@ export function Sidebar({ role, activePage, onNavigate, onSignOut }: SidebarProp
         <nav className="sidebar__nav">
           {items.map((item) => {
             const Icon = item.icon;
-            const isRoutable = role === 'superadmin' || ADMIN_ROUTABLE_PAGES.includes(item.id);
+            const isRoutable =
+              role === 'superadmin' ||
+              role === 'senior_management' ||
+              role === 'dataentry_management' ||
+              ADMIN_ROUTABLE_PAGES.includes(item.id);
             return (
               <a
                 key={item.id}
@@ -200,7 +207,14 @@ export function Sidebar({ role, activePage, onNavigate, onSignOut }: SidebarProp
         </nav>
 
         <div className="sidebar__footer">
-          <a href="#" className="sidebar__nav-item">
+          <a
+            href="#"
+            className={`sidebar__nav-item ${settingsActive ? 'sidebar__nav-item--active' : ''}`}
+            onClick={(event) => {
+              event.preventDefault();
+              onSettings?.();
+            }}
+          >
             <SidebarSettingsIcon />
             <span>الإعدادات</span>
           </a>
@@ -242,10 +256,10 @@ export function Sidebar({ role, activePage, onNavigate, onSignOut }: SidebarProp
             </div>
 
             <div className="sidebar__profile-info">
-              <span className="sidebar__profile-name">{userProfile.name}</span>
-              <span className="sidebar__profile-role">{userProfile.role}</span>
+              <span className="sidebar__profile-name">{profile?.name ?? userProfile.name}</span>
+              <span className="sidebar__profile-role">{profile?.role ?? userProfile.role}</span>
             </div>
-            <div className="sidebar__avatar">{userProfile.initial}</div>
+            <div className="sidebar__avatar">{profile?.initial ?? userProfile.initial}</div>
           </div>
         </div>
       </aside>

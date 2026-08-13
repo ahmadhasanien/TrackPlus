@@ -58,6 +58,23 @@ export function SubscriptionsIcon() {
   );
 }
 
+export function PptxIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>
+      
+      <rect x="2" y="3" width="20" height="14" rx="2" stroke="currentColor" strokeWidth="1.6" />
+      
+      <rect x="6" y="10" width="2.5" height="4" rx="0.5" fill="currentColor" opacity="0.7" />
+      <rect x="10.75" y="7.5" width="2.5" height="6.5" rx="0.5" fill="currentColor" opacity="0.9" />
+      <rect x="15.5" y="9" width="2.5" height="5" rx="0.5" fill="currentColor" opacity="0.7" />
+      
+      <path d="M12 17v3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      
+      <path d="M8 20h8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export function AuditLogIcon() {
   return (
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden>

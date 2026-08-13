@@ -1,5 +1,4 @@
-// PROJECT, PRESETS, AVAILABLE_SECTIONS, AVAILABLE_CHARTS now live in config.js
-// (loaded before this file — see index.html). Keeps data separate from logic.
+
 
 let state = {
   logoDataUrl: null,
@@ -9,20 +8,20 @@ let state = {
   accent: '#E8DCC4',
   fontColor: '#0B3D2E',
 
-  // TASK 3 (Ahmed): drive the section-selector checkboxes / "إضافة قسم"
-  // dropdown off this. Pre-seeded with the `core: true` sections from
-  // config.js so the export still works before the UI exists.
+  
+  
+  
   selectedSections: AVAILABLE_SECTIONS.filter(s => s.core).map(s => s.id),
 
-  // TASK 3 (Ahmed): drive the dashboard chart checkboxes off this.
-  // Empty by default — no dashboard slide unless the user picks charts.
+  
+  
   selectedCharts: [],
 
-  // Per-field checkbox state for the green "chips" under each section
-  // row: { [sectionId]: Set<fieldId> } — a field id in the set means
-  // it's ticked (its data appears on that section's slide). Every
-  // section (core + optional) starts fully ticked, matching the
-  // original all-fields-shown behavior.
+  
+  
+  
+  
+  
   sectionFieldState: {}
 };
 AVAILABLE_SECTIONS.forEach(s => {
@@ -50,16 +49,6 @@ function applyPreset(p) {
 
 function fmt(n) { return new Intl.NumberFormat('ar-SA').format(n); }
 
-/**
- * TASK 3 (Ahmed) — per-field checkbox state
- * ------------------------------------------------------------------
- * Each AVAILABLE_SECTIONS[].fields entry is just {id, label} (see
- * config.js). Where a field's slide value differs from its chip label
- * (e.g. "مدير المشروع" -> the actual manager's name), the section's
- * entry below resolves id -> value. Sections where the chip label IS
- * the slide content verbatim (outputs, timeline, whatif) don't need
- * an entry — getCheckedFieldItems() falls back to the label itself.
- */
 function overviewFieldValues() {
   return {
     manager: PROJECT.projectManager,
@@ -110,13 +99,6 @@ const SECTION_FIELD_VALUE_FNS = {
   whatif: whatifFieldValues
 };
 
-/**
- * Returns the currently-ticked fields for a section as
- * [{id, label, value}], in the section's original field order — this
- * is what every buildXxxSlide()/buildXxxPreview() now iterates over
- * instead of a hardcoded list, so unticking a chip actually removes
- * that data point from both the live preview and the exported .pptx.
- */
 function getCheckedFieldItems(sectionId) {
   const section = AVAILABLE_SECTIONS.find(s => s.id === sectionId);
   if (!section) return [];
@@ -128,13 +110,6 @@ function getCheckedFieldItems(sectionId) {
     .map(f => ({ id: f.id, label: f.label, value: values ? values[f.id] : f.label }));
 }
 
-/**
- * Removes an optional section entirely (trash-icon click, or
- * automatically when its last field gets unticked — see
- * toggleSectionField()) and resets its field state back to fully
- * ticked, so it starts fresh next time it's re-added from the
- * "إضافة قسم" dropdown.
- */
 function removeSection(id) {
   state.selectedSections = state.selectedSections.filter(sid => sid !== id);
   const section = AVAILABLE_SECTIONS.find(s => s.id === id);
@@ -143,15 +118,6 @@ function removeSection(id) {
   renderPreview();
 }
 
-/**
- * Ticks/unticks one field chip.
- * - Core sections (overview/milestones/outputs, non-deletable): at
- *   least one field must stay ticked, so the last remaining tick
- *   can't be removed — the click is simply ignored.
- * - Optional sections: fields can be freely unticked, but unticking
- *   the last one removes the whole section (back to the "إضافة قسم"
- *   dropdown) since a section with no data doesn't make sense to keep.
- */
 function toggleSectionField(sectionId, fieldId) {
   const section = AVAILABLE_SECTIONS.find(s => s.id === sectionId);
   if (!section) return;
@@ -160,9 +126,9 @@ function toggleSectionField(sectionId, fieldId) {
 
   if (checked.has(fieldId)) {
     if (checked.size <= 1) {
-      if (section.core) return; // must keep at least one ticked field
+      if (section.core) return; 
       checked.delete(fieldId);
-      removeSection(sectionId); // last field gone -> drop the whole section
+      removeSection(sectionId); 
       return;
     }
     checked.delete(fieldId);
@@ -178,7 +144,7 @@ function renderPreview() {
   $('coverInner').style.background = state.primary;
   $('coverInner').style.fontFamily = state.font;
   $('coverInner').style.color = '#FFFFFF';
-  $('coverTitle').style.color = '#FFFFFF'; // always white — matches the hardcoded 'FFFFFF' used for this text in buildPptx()
+  $('coverTitle').style.color = '#FFFFFF'; 
   $('leftBar').style.background = state.secondary;
   $('topBar').style.background = state.accent;
   $('coverCode').style.color = state.accent;
@@ -219,25 +185,14 @@ function renderPreview() {
     </div>
   `).join('');
 
-  // TASK 3 (Ahmed) fix: keep the live-preview carousel (slide count,
-  // badge label, and the currently-shown slide's content/colors) fully
-  // in sync with the current section/chart selection. Re-showing the
-  // current index also clamps it if the selection just got shorter
-  // (e.g. removing the last section while viewing it).
+  
+  
+  
+  
+  
   showCarouselSlide(carouselIndex);
 }
 
-// TASK 3 (Ahmed) fix: single-slide-at-a-time preview carousel that now
-// mirrors the FULL exported deck (cover + every selected section, in the
-// same AVAILABLE_SECTIONS order buildPptx() uses, + dashboard if any
-// chart is selected) instead of only ever showing cover/overview.
-// Left (‹) = next slide, Right (›) = previous slide — matches RTL reading
-// direction where "next" content sits to the left.
-
-// DOM ids that hold an actual slide: 'cover' and 'overviewSlide' have
-// their own dedicated markup; every other slide type reuses the single
-// generic '#sectionSlide' container, whose content is (re)rendered right
-// before it's shown.
 const SLIDE_DOM_IDS = ['cover', 'overviewSlide', 'sectionSlide'];
 
 function domIdForSlide(id) {
@@ -246,8 +201,6 @@ function domIdForSlide(id) {
   return 'sectionSlide';
 }
 
-// Builds the ordered list of {id, label} slides that will actually be in
-// the exported .pptx for the current selection — same order as buildPptx().
 function getSlideOrder() {
   const order = [{ id: 'cover', label: 'الغلاف' }];
   AVAILABLE_SECTIONS
@@ -271,7 +224,7 @@ function updateSlideBadge() {
 }
 
 function showCarouselSlide(i) {
-  // Recompute in case sections/charts changed since the last render.
+  
   carouselOrder = getSlideOrder();
   totalSlidesCount = carouselOrder.length;
   carouselIndex = ((i % carouselOrder.length) + carouselOrder.length) % carouselOrder.length;
@@ -290,12 +243,6 @@ function showCarouselSlide(i) {
   updateSlideBadge();
 }
 
-/**
- * Populates the shared #sectionSlide container for any slide beyond
- * cover/overview, using the same sample data each buildXxxSlide() in
- * buildPptx() uses, so the live preview stays a faithful match of what
- * gets exported.
- */
 const SECTION_PREVIEW_BUILDERS = {
   milestones: buildMilestonesPreview,
   outputs: buildOutputsPreview,
@@ -324,8 +271,6 @@ function renderGenericSectionSlide(id, label) {
   $('sectionBody').innerHTML = builder ? builder() : '';
 }
 
-// ---------- preview builders (mirror the buildXxxSlide() pptx functions) ----------
-
 function buildMilestonesPreview() {
   const phases = getCheckedFieldItems('milestones');
   return phases.map(p => `
@@ -352,8 +297,8 @@ function buildOutputsPreview() {
 function buildTimelinePreview() {
   const milestones = getCheckedFieldItems('timeline').map(f => f.value);
   const dots = milestones.map((label, i) => {
-    // RTL: first item on the right, matching buildTimelineSlide() in buildPptx().
-    // Guard against a single ticked field (division by zero) — center it.
+    
+    
     const pct = milestones.length > 1 ? (i / (milestones.length - 1)) * 100 : 50;
     return `
       <div class="dot" style="right:${pct}%;background:${state.secondary}"></div>
@@ -414,9 +359,9 @@ function buildDashboardPreview() {
 
   if (!selected.length) return '';
 
-  // Same renderDashboardChartImage() used for the .pptx export (see
-  // js/chartRender.js), so the preview carousel is a faithful match
-  // of what actually gets generated — not a simplified mockup.
+  
+  
+  
   return `<div class="pv-cards-grid cols-2">` + selected.map(chart => {
     const imgDataUrl = renderDashboardChartImage(chart, state.font, {
       primary: state.primary, secondary: state.secondary, accent: state.accent
@@ -490,19 +435,6 @@ document.querySelectorAll('.preset').forEach(p => {
   p.addEventListener('click', () => applyPreset(PRESETS[p.dataset.preset]));
 });
 
-/**
- * TASK 3 (Ahmed) — Section selector
- * ------------------------------------------------------------------
- * Renders the "البيانات المضافة" panel as one continuous list of
- * section-rows — core sections (locked) first, then any added
- * optional sections — each row showing its name, a status dot, a
- * delete icon (disabled for core rows), and its field "chips",
- * matching design/section-selector-mockup.png. The "إضافة قسم"
- * control is a small dark button + dropdown panel (not a native
- * <select>) listing sections not yet added; picking one adds it.
- * Every mutation of state.selectedSections re-renders this panel and
- * calls renderPreview() so the live preview + export stay in sync.
- */
 const TRASH_ICON_SVG = `
   <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor"
        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -559,8 +491,6 @@ function renderSectionSelector() {
     : `<div class="empty">تمت إضافة جميع الأقسام</div>`;
 }
 
-// Delete icon click (only wired for non-disabled/added rows) and
-// field-chip toggle click, both scoped to the section list.
 $('sectionList').addEventListener('click', e => {
   const delBtn = e.target.closest('.row-delete-btn');
   if (delBtn) {
@@ -577,7 +507,6 @@ $('sectionList').addEventListener('click', e => {
   }
 });
 
-// "إضافة قسم" button opens/closes the floating options panel.
 const addSectionBtn = $('addSectionBtn');
 const addSectionPanel = $('addSectionPanel');
 addSectionBtn.addEventListener('click', e => {
@@ -605,13 +534,6 @@ document.addEventListener('click', e => {
   addSectionBtn.setAttribute('aria-expanded', 'false');
 });
 
-/**
- * TASK 3 (Ahmed) — Dashboard chart selector
- * ------------------------------------------------------------------
- * Renders checkboxes for AVAILABLE_CHARTS and keeps them wired to
- * state.selectedCharts. An empty selection means no Dashboard slide
- * is generated on export.
- */
 function renderChartSelector() {
   $('chartChecklist').innerHTML = AVAILABLE_CHARTS.map(c => `
     <label class="chart-checkbox-item">
@@ -633,6 +555,8 @@ $('chartChecklist').addEventListener('change', e => {
 });
 
 function showStatus(text, kind) {
+  
+  if (kind === 'success' || kind === 'error') return;
   const el = $('status');
   el.textContent = text;
   el.className = 'status-bar show ' + (kind || '');
@@ -641,23 +565,13 @@ function showStatus(text, kind) {
 
 function hex(c) { return (c || '').replace('#', '').toUpperCase(); }
 
-/**
- * Builds the full exported .pptx: cover slide, then one slide per
- * entry in state.selectedSections (in AVAILABLE_SECTIONS catalogue
- * order, via each section's slideBuilder from config.js), then an
- * optional Dashboard slide if state.selectedCharts is non-empty.
- * The cover slide is always first — it's core and not part of
- * AVAILABLE_SECTIONS. renderPreview() mirrors the same selection
- * state for the live HTML preview so the two stay in sync.
- * ------------------------------------------------------------------
- */
 async function buildPptx() {
   const pres = new PptxGenJS();
   pres.layout = 'LAYOUT_WIDE';
   pres.rtlMode = true;
   pres.title = PROJECT.name;
   
-  // ---------- SLIDE 1: COVER ----------
+  
   const s1 = pres.addSlide();
   s1.background = { color: hex(state.primary) };
   
@@ -699,7 +613,7 @@ async function buildPptx() {
     align: 'right', rtlMode: true, margin: 0
   });
   
-  // ---------- SLIDES 2+: sections, in AVAILABLE_SECTIONS catalogue order ----------
+  
   const sectionBuilders = {
     buildOverviewSlide, buildMilestonesSlide, buildOutputsSlide,
     buildTimelineSlide, buildChangeRequestsSlide, buildRisksSlide,
@@ -712,7 +626,7 @@ async function buildPptx() {
       if (builder) builder(pres);
     });
 
-  // ---------- DASHBOARD SLIDE (only if charts are selected) ----------
+  
   if (state.selectedCharts.length) {
     buildDashboardSlide(pres);
   }
@@ -720,16 +634,6 @@ async function buildPptx() {
   return pres;
 }
 
-/**
- * Shared header used by every section slide, so new sections stay
- * visually consistent with the original "نظرة عامة" slide: white
- * background, right-aligned bold title in the primary color, a thin
- * underline in the secondary color, and — when a logo was uploaded —
- * the logo in the top-left corner. Left side (not right, like the
- * cover slide) because the title text is right-aligned and hugs the
- * right edge of its box (up to x=12.7); a right-side logo would sit
- * on top of it.
- */
 function addSlideHeader(pres, slide, title) {
   slide.background = { color: 'FFFFFF' };
   slide.addText(title, {
@@ -746,7 +650,6 @@ function addSlideHeader(pres, slide, title) {
   }
 }
 
-// ---------- SLIDE: OVERVIEW (core) ----------
 function buildOverviewSlide(pres) {
   const s2 = pres.addSlide();
   addSlideHeader(pres, s2, 'نظرة عامة على المشروع');
@@ -799,10 +702,6 @@ function buildOverviewSlide(pres) {
   });
 }
 
-// ---------- SLIDE: MILESTONES / PROJECT PHASES (core) ----------
-// PROJECT has no phases data in config.js yet (static demo data, per
-// README) — reuses PLACEHOLDER_METRICS.phaseProgress so the numbers
-// are at least internally consistent.
 function buildMilestonesSlide(pres) {
   const s = pres.addSlide();
   addSlideHeader(pres, s, 'مراحل المشروع');
@@ -839,9 +738,6 @@ function buildMilestonesSlide(pres) {
   });
 }
 
-// ---------- SLIDE: OUTPUTS (core) ----------
-// Placeholder deliverables list — PROJECT has no outputs array yet
-// (out of scope per README until wired to the TrackPlus API).
 function buildOutputsSlide(pres) {
   const s = pres.addSlide();
   addSlideHeader(pres, s, 'المخرجات');
@@ -868,7 +764,6 @@ function buildOutputsSlide(pres) {
   });
 }
 
-// ---------- SLIDE: TIMELINE (optional) ----------
 function buildTimelineSlide(pres) {
   const s = pres.addSlide();
   addSlideHeader(pres, s, 'الجدول الزمني');
@@ -884,10 +779,10 @@ function buildTimelineSlide(pres) {
     line: { color: 'E2E8F0', width: 2 }
   });
   const milestones = getCheckedFieldItems('timeline').map(f => f.value);
-  // Guard against a single ticked field (division by zero) — center it.
+  
   const step = milestones.length > 1 ? (lineX1 - lineX0) / (milestones.length - 1) : 0;
   milestones.forEach((label, i) => {
-    const x = milestones.length > 1 ? lineX1 - i * step : (lineX0 + lineX1) / 2; // RTL: first item on the right
+    const x = milestones.length > 1 ? lineX1 - i * step : (lineX0 + lineX1) / 2; 
     s.addShape(pres.shapes.OVAL, {
       x: x - 0.09, y: lineY - 0.09, w: 0.18, h: 0.18,
       fill: { color: hex(state.secondary) }, line: { color: 'FFFFFF', width: 1.5 }
@@ -900,7 +795,6 @@ function buildTimelineSlide(pres) {
   });
 }
 
-// ---------- SLIDE: CHANGE REQUESTS (optional) ----------
 function buildChangeRequestsSlide(pres) {
   const s = pres.addSlide();
   addSlideHeader(pres, s, 'طلبات التغيير');
@@ -930,9 +824,6 @@ function buildChangeRequestsSlide(pres) {
   });
 }
 
-// ---------- SLIDE: RISKS (optional) ----------
-// Reuses the same "openRisks" data as the لوحة التحكم dashboard chart
-// so the numbers stay consistent across the whole deck.
 function buildRisksSlide(pres) {
   const s = pres.addSlide();
   addSlideHeader(pres, s, 'المخاطر');
@@ -959,7 +850,6 @@ function buildRisksSlide(pres) {
   });
 }
 
-// ---------- SLIDE: WHAT IF (optional) ----------
 function buildWhatIfSlide(pres) {
   const s = pres.addSlide();
   addSlideHeader(pres, s, 'ماذا لو ؟');
@@ -988,8 +878,6 @@ function buildWhatIfSlide(pres) {
   });
 }
 
-// ---------- SLIDE: FINANCE (optional) ----------
-// Reuses PLACEHOLDER_METRICS.budgetSplit for the summary cards.
 function buildFinanceSlide(pres) {
   const s = pres.addSlide();
   addSlideHeader(pres, s, 'الأصول والمالية');
@@ -1025,14 +913,6 @@ function buildFinanceSlide(pres) {
   });
 }
 
-// ---------- SLIDE: DASHBOARD (only if state.selectedCharts.length) ----------
-// One slide, up to a 2x2 grid of charts. Each chart is rendered with
-// renderDashboardChartImage() (js/chartRender.js) — a Canvas
-// re-creation of the exact لوحة التحكم widget (colors, donut gaps,
-// legend layout, rounded stacked-bar segments) — and dropped in as a
-// PNG via addImage(), rather than a native pptxgenjs chart, so what
-// lands in the deck looks exactly like its dashboard counterpart
-// instead of generic Office chart styling.
 function buildDashboardSlide(pres) {
   const s = pres.addSlide();
   addSlideHeader(pres, s, 'لوحة المعلومات');

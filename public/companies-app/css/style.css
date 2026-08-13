@@ -1,23 +1,17 @@
 * { box-sizing: border-box; margin: 0; padding: 0; }
 body {
   font-family: 'Tajawal', sans-serif;
-  /* Matches the لوحة التحكم page background so both pages feel like
-     part of the same app. */
+  
   background: linear-gradient(180deg, #f2f4f2 0%, #dbebd8 100%);
   color: #1A1A1A;
-  /* Right side (adjacent to the sidebar in this dir="rtl" layout) gets
-     much less padding so panels sit close to the menu; other sides
-     keep the original breathing room. */
+  
   padding: 24px 8px 24px 24px;
   min-height: 100vh;
 }
 .app {
   display: flex;
   flex-direction: column;
-  /* dir="rtl" on <html>, so flex-end is the inline-end edge — the
-     right side — leaning panels toward the sidebar menu instead of
-     centering them. No max-width here on purpose: a capped, centered
-     .app left a visible gap next to the sidebar on wide screens. */
+  
   align-items: flex-end;
   gap: 24px;
 }
@@ -33,7 +27,6 @@ body {
   .panel { width: 100%; }
 }
 
-/* 3. هوية الجهة — logo, then font underneath, each full width of the panel */
 .identity-row {
   display: flex;
   flex-direction: column;
@@ -41,10 +34,6 @@ body {
 }
 .identity-row .field { margin-bottom: 0; }
 
-/* TASK 3 (Ahmed) — section selector: one continuous row list (core rows
-   first, locked; then any added optional rows), each row carrying a
-   delete icon on the right, a name+status-dot, and a wrapped row of
-   field "chips" underneath — matches design/section-selector-mockup.png. */
 .section-list {
   display: flex;
   flex-direction: column;
@@ -223,7 +212,6 @@ body {
   text-align: center;
 }
 
-/* TASK 3 (Ahmed) — dashboard chart selector */
 .chart-checklist {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -433,8 +421,6 @@ body {
 .btn-primary:active { transform: translateY(0); }
 .btn-primary:disabled { background: #94A3B8; cursor: not-allowed; transform: none; }
 
-/* 6. المعاينة المباشرة — one slide visible at a time, full section width,
-   height follows the 16:9 slide ratio; left/right nav buttons switch slides */
 .preview-header {
   display: flex;
   justify-content: flex-end;
@@ -517,9 +503,7 @@ body {
   font-weight: 700;
   margin-bottom: 0.8vw;
   text-align: right;
-  color: #FFFFFF; /* cover title is always white, matching the generated .pptx (see app.js addText color:'FFFFFF').
-                     Needed because ".panel h1" (generic panel heading rule) has equal specificity and was
-                     winning the cascade, turning this title dark navy in the live preview only. */
+  color: #FFFFFF; 
 }
 .slide-cover .code {
   font-size: 1.1vw;
@@ -623,11 +607,6 @@ body {
   color: white;
 }
 
-/* Generic "section" slide preview — reused for every section type beyond
-   cover/overview (milestones, outputs, timeline, changes, risks, whatif,
-   finance, dashboard). Content of .body is swapped per-slide by app.js
-   (renderGenericSectionSlide) to mirror the matching buildXxxSlide() in
-   the exported .pptx. */
 .slide-section {
   height: 100%;
   width: 100%;
@@ -661,7 +640,6 @@ body {
   margin-bottom: 1%;
 }
 
-/* row list (milestones / changes / whatif) */
 .pv-row {
   display: flex;
   align-items: center;
@@ -708,7 +686,6 @@ body {
   height: 100%;
 }
 
-/* cards grid (outputs / risks / finance / dashboard) */
 .pv-cards-grid {
   display: grid;
   gap: 1%;
@@ -741,7 +718,6 @@ body {
   margin-top: 0.3vw;
 }
 
-/* timeline (dates + dotted line) */
 .pv-timeline {
   position: relative;
   margin-top: 3.5vw;
@@ -774,7 +750,6 @@ body {
   font-size: 0.75vw;
 }
 
-/* dashboard chart preview */
 .pv-dashboard-card { text-align: right; }
 .pv-dashboard-card-img {
   display: block;
@@ -824,8 +799,6 @@ body {
   z-index: 100;
 }
 .status-bar.show { opacity: 1; }
-.status-bar.success { background: #059669; }
-.status-bar.error { background: #DC2626; }
 
 @media (max-width: 900px) {
   .preset-row { grid-template-columns: 1fr; }

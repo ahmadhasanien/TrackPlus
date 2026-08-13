@@ -16,6 +16,7 @@ export interface TenantUser {
   id: string;
   name: string;
   email: string;
+  department?: string;
   initials: string;
   avatarColor: string;
   role: TenantUserRole;

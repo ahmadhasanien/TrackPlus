@@ -1,15 +1,4 @@
-/**
- * config.js
- * -----------------------------------------------------------------------
- * Static data for the presentation generator: the demo project record,
- * the branding presets, and (new for Task 3) the catalogue of optional
- * sections and dashboard charts the user can pick from.
- *
- * In a real integration PROJECT would come from the TrackPlus API
- * instead of being hard-coded here — that wiring is out of scope for
- * this task, keep it static for now.
- * -----------------------------------------------------------------------
- */
+
 
 const PROJECT = {
   name: 'مشروع تطوير منظومة المتابعة الرقمية',
@@ -31,37 +20,6 @@ const PRESETS = {
   corporate: { font: 'IBM Plex Sans Arabic', primary: '#1A1F36', secondary: '#4F46E5', accent: '#F59E0B' }
 };
 
-/**
- * ------------------------------------------------------------------
- * TASK 3 — Ahmed starts here
- * ------------------------------------------------------------------
- * See README.md → "Task 3: Section Selector & Dashboard" and
- * design/section-selector-mockup.png for the reference UI.
- *
- * AVAILABLE_SECTIONS: every section the generated .pptx can contain.
- * - `core: true` sections are always included and cannot be
- *   unchecked (matches "نظرة عامة", "مراحل المشروع", "المخرجات" in
- *   the mockup — they ship with a green dot / locked checkbox).
- * - `core: false` sections start unchecked; the user adds them via
- *   the "إضافة قسم" dropdown, same as the mockup.
- * - `slideBuilder` is the name of the function in app.js that should
- *   render that section's slide(s) — build one per section and wire
- *   it up in buildPptx().
- *
- * Feel free to change this shape if a different structure fits the
- * UI better — this is a starting point, not a fixed contract.
- */
-/**
- * Each field now carries a stable `id` (used by the per-field checkbox
- * state in app.js) alongside its chip `label`. Field lists were also
- * re-aligned so they match 1:1 with what each slideBuilder actually
- * renders — previously e.g. "outputs".fields listed 3 generic items
- * ('ملفات', ...) while buildOutputsSlide() rendered 4 different
- * hardcoded deliverables, so unticking a chip couldn't have mapped to
- * real slide content. Actual field *values* (names, dates, amounts)
- * are resolved at render time in app.js (see SECTION_FIELD_VALUE_FNS)
- * since several need fmt()/PROJECT data not available at config-load time.
- */
 const AVAILABLE_SECTIONS = [
   { id: 'overview',   label: 'نظرة عامة',            core: true,  slideBuilder: 'buildOverviewSlide',
     fields: [
@@ -119,40 +77,11 @@ const AVAILABLE_SECTIONS = [
     ] }
 ];
 
-/**
- * PLACEHOLDER_METRICS: static demo numbers reused internally by the
- * Milestones / Risks / Finance sections (buildMilestonesSlide,
- * buildRisksSlide, buildFinanceSlide in app.js) just to keep those
- * placeholder slides internally consistent. Unrelated to the chart
- * catalogue below — kept separate so renaming/changing the dashboard
- * charts can never silently break those sections.
- */
 const PLACEHOLDER_METRICS = {
   phaseProgress: { labels: ['المرحلة 1', 'المرحلة 2', 'المرحلة 3', 'المرحلة 4'], values: [100, 76, 40, 5] },
   budgetSplit:   { labels: ['مصروف', 'متبقي'], values: [3400000, 5100000] }
 };
 
-/**
- * AVAILABLE_CHARTS: the chart catalogue for the "لوحة المعلومات"
- * (Dashboard) panel. These are the *same* charts/widgets shown on the
- * لوحة التحكم page (see src/components/dashboard/widgets), reproduced
- * here with their real data. `colors` below is the fallback palette
- * used only if no brand colors are available.
- *
- * In the exported deck and the live preview, these fallback colors are
- * NOT what actually gets used: renderDashboardChartImage() (js/chartRender.js)
- * builds each chart's palette directly from the current
- * state.primary/secondary/accent (the "الألوان" panel) via
- * brandChartPalette(), so a chart's colors always match whatever the
- * presentation's colors currently are — a preset (وزاري/هيئة/شركة) or
- * hand-picked, it's the same state fields either way. A small
- * distinguishability fix-up (ensureDistinguishable()) keeps slices
- * tellable apart even if two brand colors are very close.
- *
- * `colors` is one hex per data point for the two donuts (ProjectStatusDonutWidget,
- * OpenRisksDonutWidget), and one hex per series (low/medium/high) for
- * the stacked bar (RisksByLevelChartWidget).
- */
 const AVAILABLE_CHARTS = [
   {
     id: 'projectStatus',
@@ -185,10 +114,10 @@ const AVAILABLE_CHARTS = [
     ]
   },
   {
-    // Mirrors AvgProgressWidget.tsx: same 80% mock value, same
-    // success-tone green (#17b26a, the solid start of its gradient)
-    // and the same light grey track (#e7e8eb) it sits on — see
-    // src/components/ui/ui.css .ui-progress__track / __fill--success.
+    
+    
+    
+    
     id: 'avgProgress',
     label: 'متوسط تقدم المشاريع',
     type: 'doughnut',

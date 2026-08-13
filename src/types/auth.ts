@@ -1,1 +1,1 @@
-export type UserRole = 'admin' | 'superadmin';
+export type UserRole = 'admin' | 'superadmin' | 'senior_management' | 'dataentry_management';

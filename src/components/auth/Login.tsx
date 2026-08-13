@@ -14,18 +14,22 @@ interface Account {
 const ACCOUNTS: Account[] = [
   { email: 'admin@jodayn.com', password: '12jodayn', role: 'admin' },
   { email: 'superadmin@jodayn.com', password: 'jodayn12', role: 'superadmin' },
+  { email: 'senior@org.com', password: 'senior12', role: 'senior_management' },
+  { email: 'dataentry@org.com', password: 'dataentry', role: 'dataentry_management' },
 ];
 
 const MIN_PASSWORD_LENGTH = 8;
 
 interface LoginProps {
   onSuccess: (role: UserRole) => void;
+  onForgotPassword?: () => void;
 }
 
-export function Login({ onSuccess }: LoginProps) {
+export function Login({ onSuccess, onForgotPassword }: LoginProps) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -111,6 +115,27 @@ export function Login({ onSuccess }: LoginProps) {
             >
               {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
             </button>
+          </div>
+
+          <div className="auth-form__utility-row">
+            <label className="auth-form__remember">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+              />
+              <span>تذكرني</span>
+            </label>
+
+            {onForgotPassword && (
+              <button
+                type="button"
+                className="auth-form__forgot-link"
+                onClick={onForgotPassword}
+              >
+                نسيت كلمة المرور؟
+              </button>
+            )}
           </div>
 
           {error && <p className="auth-form__error">{error}</p>}

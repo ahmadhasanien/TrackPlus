@@ -14,8 +14,10 @@ import {
   Trash2,
   Shield,
 } from 'lucide-react';
-import { useTenantById, useTenantMutations, type TenantUser } from '../../context/TenantContext';
+import { useState } from 'react';
+import { useTenantById, useTenantMutations, type TenantUser, type TenantUserRole } from '../../context/TenantContext';
 import { PageHeader } from '../layout/PageHeader';
+import { FeedbackBanner } from '../ui/FeedbackBanner';
 import './tenant-details.css';
 
 interface TenantDetailsPageProps {
@@ -55,6 +57,14 @@ function barClass(p: number) {
 export function TenantDetailsPage({ tenantId, onBack, onDeleted }: TenantDetailsPageProps) {
   const tenant = useTenantById(tenantId);
   const { updateTenant, deleteTenant } = useTenantMutations();
+  const [isAddUserOpen, setIsAddUserOpen] = useState(false);
+  const [banner, setBanner] = useState<'success' | 'error' | null>(null);
+  const [newUser, setNewUser] = useState({
+    name: '',
+    email: '',
+    department: '',
+    role: '' as TenantUserRole | '',
+  });
 
   
 
@@ -134,6 +144,49 @@ export function TenantDetailsPage({ tenantId, onBack, onDeleted }: TenantDetails
     updateTenant(tenant.id, { users: updatedUsers });
   }
 
+  function closeAddUserModal() {
+    setIsAddUserOpen(false);
+    setNewUser({ name: '', email: '', department: '', role: '' });
+  }
+
+  function handleAddUserSubmit() {
+    if (!tenant) return;
+
+    const name = newUser.name.trim();
+    const email = newUser.email.trim();
+    const department = newUser.department.trim();
+    const role = newUser.role;
+    const emailIsValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+
+    if (!name || !email || !department || !role || !emailIsValid) {
+      closeAddUserModal();
+      setBanner('error');
+      return;
+    }
+
+    const initials = name.trim().split(/\s+/).slice(0, 2).map((part) => part[0]).join('');
+    const colors = ['#2563eb', '#7c3aed', '#059669', '#dc2626', '#d97706', '#0891b2'];
+    const avatarColor = colors[tenant.users.length % colors.length];
+    const user: TenantUser = {
+      id: `u-${Date.now()}`,
+      name,
+      email,
+      department,
+      initials: initials || name.slice(0, 2),
+      avatarColor,
+      role,
+      status: 'active',
+      statusLabel: 'نشط',
+    };
+
+    updateTenant(tenant.id, {
+      users: [...tenant.users, user],
+      activeUsers: tenant.activeUsers + 1,
+    });
+    closeAddUserModal();
+    setBanner('success');
+  }
+
   
 
   return (
@@ -142,6 +195,11 @@ export function TenantDetailsPage({ tenantId, onBack, onDeleted }: TenantDetails
         title={tenant.name}
         breadcrumbs={[{ label: 'إدارة المستأجرين', onClick: onBack }]}
       />
+      {banner && (
+        <FeedbackBanner tone={banner} onClose={() => setBanner(null)}>
+          {banner === 'success' ? 'تم إرسال الدعوة بنجاح' : 'حدث خطأ ما، يرجى المحاولة مرة أخرى'}
+        </FeedbackBanner>
+      )}
       <div className="td-page" dir="rtl">
 
         {}
@@ -167,6 +225,17 @@ export function TenantDetailsPage({ tenantId, onBack, onDeleted }: TenantDetails
             </div>
 
             <div className="td-actions">
+              <button
+                type="button"
+                className="td-add-user-btn"
+                onClick={() => {
+                  setBanner(null);
+                  setIsAddUserOpen(true);
+                }}
+              >
+                <span>إضافة مستخدم</span>
+                <span className="td-add-user-btn__plus" aria-hidden>+</span>
+              </button>
               <button type="button" className="td-btn td-btn--outline">
                 <Download size={14} strokeWidth={2.25} />
                 تصدير البيانات
@@ -456,6 +525,92 @@ export function TenantDetailsPage({ tenantId, onBack, onDeleted }: TenantDetails
           </div>{}
         </div>{}
       </div>{}
+
+      {isAddUserOpen && (
+        <div className="td-add-user-overlay" role="presentation">
+          <div
+            className="td-add-user-modal"
+            dir="rtl"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="td-add-user-title"
+          >
+            <div className="td-add-user-modal__header">
+              <div className="td-add-user-modal__icon" aria-hidden>
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="8" r="3.5" stroke="currentColor" strokeWidth="1.7" />
+                  <path d="M5.5 19c.55-3.1 2.7-4.8 6.5-4.8s5.95 1.7 6.5 4.8" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" />
+                </svg>
+              </div>
+              <h2 id="td-add-user-title">إضافة مستخدم</h2>
+            </div>
+
+            <div className="td-add-user-modal__divider" />
+
+            <div className="td-add-user-form">
+              <label className="td-add-user-field">
+                <span>الاسم الكامل</span>
+                <input
+                  type="text"
+                  value={newUser.name}
+                  onChange={(e) => setNewUser((prev) => ({ ...prev, name: e.target.value }))}
+                  autoComplete="name"
+                />
+              </label>
+
+              <label className="td-add-user-field">
+                <span>البريد الإلكتروني</span>
+                <input
+                  type="email"
+                  value={newUser.email}
+                  onChange={(e) => setNewUser((prev) => ({ ...prev, email: e.target.value }))}
+                  autoComplete="email"
+                  dir="ltr"
+                />
+              </label>
+
+              <label className="td-add-user-field">
+                <span>القسم / الإدارة</span>
+                <input
+                  type="text"
+                  value={newUser.department}
+                  onChange={(e) => setNewUser((prev) => ({ ...prev, department: e.target.value }))}
+                />
+              </label>
+
+              <label className="td-add-user-field">
+                <span>الدور</span>
+                <div className="td-add-user-select-wrap">
+                  <select
+                    value={newUser.role}
+                    onChange={(e) => setNewUser((prev) => ({ ...prev, role: e.target.value as TenantUserRole }))}
+                  >
+                    <option value="">اختر الدور</option>
+                    <option value="مدير النظام">مدير النظام</option>
+                    <option value="محلل">محلل</option>
+                    <option value="مشرف">مشرف</option>
+                    <option value="مستخدم">مستخدم</option>
+                  </select>
+                  <svg viewBox="0 0 24 24" fill="none" aria-hidden>
+                    <path d="M7 10l5 5 5-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                </div>
+              </label>
+            </div>
+
+            <div className="td-add-user-modal__actions">
+              <button type="button" className="td-add-user-submit" onClick={handleAddUserSubmit}>
+                <span>إرسال دعوة</span>
+                <span className="td-add-user-submit__icon" aria-hidden>✓</span>
+              </button>
+              <button type="button" className="td-add-user-cancel" onClick={closeAddUserModal}>
+                <span>إلغاء</span>
+                <span className="td-add-user-cancel__icon" aria-hidden>×</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

@@ -1,5 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap');
 
+@tailwind components;
+@tailwind utilities;
+
 *,
 *::before,
 *::after {
@@ -39,4 +42,242 @@ input {
 
 input:focus {
   border-color: #17b26a;
+}
+
+.senior-feedback-banner {
+  width: 100% !important;
+  min-width: 0 !important;
+  height: 48px !important;
+  min-height: 48px !important;
+  max-height: 48px !important;
+  margin: 0 !important;
+  padding: 0 22px !important;
+  box-sizing: border-box !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+  position: relative !important;
+  inset: auto !important;
+  border: 0 !important;
+  border-bottom: 2px solid !important;
+  border-radius: 0 !important;
+  font-family: 'IBM Plex Sans Arabic', system-ui, sans-serif !important;
+  font-size: 13px !important;
+  line-height: 1 !important;
+  font-weight: 700 !important;
+  direction: rtl !important;
+  overflow: hidden !important;
+  flex-shrink: 0 !important;
+  color: #111214 !important;
+}
+
+.senior-feedback-banner--success {
+  background: #e8f7f0 !important;
+  border-bottom-color: #48a87b !important;
+}
+
+.senior-feedback-banner--error {
+  background: #feedec !important;
+  border-bottom-color: #c64d46 !important;
+}
+
+.senior-feedback-banner > span:not(.departments-toast__icon),
+.senior-feedback-banner .senior-settings__alert-text,
+.senior-feedback-banner .project-output-banner__content strong,
+.senior-feedback-banner .goals-banner__content > span:first-child {
+  min-width: 0 !important;
+  margin: 0 !important;
+  font-family: inherit !important;
+  font-size: 13px !important;
+  line-height: 1.35 !important;
+  font-weight: 700 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  text-align: right !important;
+}
+
+.senior-feedback-banner .senior-settings__alert-content,
+.senior-feedback-banner .project-output-banner__content,
+.senior-feedback-banner .goals-banner__content {
+  min-width: 0 !important;
+  flex: 1 1 auto !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  gap: 10px !important;
+  direction: rtl !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.senior-feedback-banner .departments-toast__icon,
+.senior-feedback-banner .senior-settings__alert-icon,
+.senior-feedback-banner .goals-banner__icon,
+.senior-feedback-banner .project-output-banner__icon {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  flex: 0 0 24px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  color: #fff !important;
+  background: transparent !important;
+}
+
+.senior-feedback-banner--success .departments-toast__icon,
+.senior-feedback-banner--success .senior-settings__alert-icon,
+.senior-feedback-banner--success .goals-banner__icon,
+.senior-feedback-banner--success .project-output-banner__icon {
+  background: #7fd4ad !important;
+}
+
+.senior-feedback-banner--error .departments-toast__icon,
+.senior-feedback-banner--error .senior-settings__alert-icon,
+.senior-feedback-banner--error .goals-banner__icon,
+.senior-feedback-banner--error .project-output-banner__icon {
+  background: #ff8f8f !important;
+}
+
+.senior-feedback-banner .departments-toast__icon svg,
+.senior-feedback-banner .senior-settings__alert-icon svg,
+.senior-feedback-banner .goals-banner__icon svg,
+.senior-feedback-banner .project-output-banner__icon {
+  width: 14px !important;
+  height: 14px !important;
+  min-width: 14px !important;
+  flex: 0 0 14px !important;
+  color: #fff !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  padding: 0 !important;
+}
+
+.senior-feedback-banner > button,
+.senior-feedback-banner .senior-settings__alert-close,
+.senior-feedback-banner .project-output-banner__close,
+.senior-feedback-banner .goals-banner__close {
+  width: 20px !important;
+  height: 20px !important;
+  min-width: 20px !important;
+  flex: 0 0 20px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border: 1px solid #303438 !important;
+  border-radius: 50% !important;
+  background: transparent !important;
+  color: #303438 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: pointer !important;
+}
+
+.senior-feedback-banner > button svg,
+.senior-feedback-banner .senior-settings__alert-close svg,
+.senior-feedback-banner .project-output-banner__close svg,
+.senior-feedback-banner .goals-banner__close svg {
+  width: 11px !important;
+  height: 11px !important;
+  min-width: 11px !important;
+  flex: 0 0 11px !important;
+  color: inherit !important;
+  background: transparent !important;
+}
+
+.senior-feedback-banner.senior-companies__toast {
+  position: relative !important;
+  top: auto !important;
+  right: auto !important;
+  bottom: auto !important;
+  left: auto !important;
+  z-index: auto !important;
+}
+
+.senior-feedback-banner.senior-companies__toast > svg:last-child {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  flex: 0 0 24px !important;
+  padding: 5px !important;
+  border-radius: 50% !important;
+  color: #fff !important;
+}
+
+.senior-feedback-banner.senior-companies__toast--success > svg:last-child {
+  background: #7fd4ad !important;
+}
+
+.senior-feedback-banner.senior-companies__toast--error > svg:last-child {
+  background: #ff8f8f !important;
+}
+
+.senior-feedback-banner.senior-companies__toast > span {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+
+.senior-feedback-banner .project-list-banner__icon {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  flex: 0 0 24px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 50% !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  box-sizing: border-box !important;
+  color: #fff !important;
+}
+
+.senior-feedback-banner--success .project-list-banner__icon {
+  background: #7fd4ad !important;
+}
+
+.senior-feedback-banner--error .project-list-banner__icon {
+  background: #ff8f8f !important;
+}
+
+.senior-feedback-banner .project-list-banner__icon svg {
+  width: 14px !important;
+  height: 14px !important;
+  min-width: 14px !important;
+  flex: 0 0 14px !important;
+  color: #fff !important;
+}
+
+.senior-project-list-banner > .senior-settings__alert-close {
+  order: 3 !important;
+}
+
+.senior-project-list-banner > .senior-settings__alert-content {
+  order: 2 !important;
+}
+
+.senior-project-list-banner .senior-settings__alert-icon {
+  order: 1 !important;
+}
+
+.senior-project-list-banner .senior-settings__alert-text {
+  order: 2 !important;
+  text-align: right !important;
+}
+
+:where(.tw-scope button, .tw-scope textarea, .tw-scope input) {
+  border-width: 0;
+  background-color: transparent;
+  font: inherit;
+  color: inherit;
+}
+
+body.whatif-hides-assistant-fab .assistant-fab {
+  display: none;
 }

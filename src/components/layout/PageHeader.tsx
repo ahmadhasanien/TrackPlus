@@ -21,13 +21,15 @@ interface PageHeaderProps {
 
   
   action?: ReactNode;
+
+  className?: string;
 }
 
-export function PageHeader({ title, subtitle, breadcrumbs, action }: PageHeaderProps) {
+export function PageHeader({ title, subtitle, breadcrumbs, action, className }: PageHeaderProps) {
   const isSubpage = breadcrumbs && breadcrumbs.length > 0;
 
   return (
-    <header className="page-header" dir="rtl">
+    <header className={`page-header${className ? ` ${className}` : ''}`} dir="rtl">
       {}
       <div className="page-header__title-block">
         {isSubpage ? (

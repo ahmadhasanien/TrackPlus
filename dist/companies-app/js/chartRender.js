@@ -1,26 +1,8 @@
-/**
- * chartRender.js
- * -----------------------------------------------------------------------
- * Renders the لوحة التحكم dashboard charts (see
- * src/components/dashboard/widgets/ProjectStatusDonutWidget.tsx,
- * OpenRisksDonutWidget.tsx, RisksByLevelChartWidget.tsx) to PNG data
- * URLs using Canvas 2D, mirroring their exact colors, proportions and
- * layout (donut padding-angle gap, pill/plain legend rows, rounded
- * stacked-bar segments with gaps, axis ticks, bold current month).
- *
- * Used by:
- * - app.js renderDashboardChartImage() -> the exported .pptx dashboard
- *   slide (slide.addImage instead of a generic native pptxgenjs chart),
- *   so a ticked chart lands in the deck looking exactly like its
- *   لوحة التحكم counterpart instead of a generic Office chart style.
- * - app.js buildDashboardPreview() -> the in-app live preview, so the
- *   preview and the exported deck show the same thing.
- * -----------------------------------------------------------------------
- */
+
 
 const CHART_IMG_W = 900;
 const CHART_IMG_H = 340;
-const CHART_IMG_SCALE = 3; // supersample for crisp output when scaled up in the slide
+const CHART_IMG_SCALE = 3; 
 
 function makeChartCanvas(w, h) {
   const canvas = document.createElement('canvas');
@@ -42,12 +24,6 @@ function roundRect(ctx, x, y, w, h, r) {
   ctx.closePath();
 }
 
-/**
- * Donut chart matching ProjectStatusDonutWidget ('pill' legend rows,
- * values shown as %) and OpenRisksDonutWidget ('plain' bold-colored
- * legend rows, raw counts). Legend on the right, donut on the left —
- * same order as the RTL widget markup (legend is the first DOM child).
- */
 function donutChartToDataURL({ labels, values, colors, valueSuffix = '', legendStyle = 'plain', font = 'Tajawal' }) {
   const W = CHART_IMG_W, H = CHART_IMG_H;
   const { canvas, ctx } = makeChartCanvas(W, H);
@@ -56,7 +32,7 @@ function donutChartToDataURL({ labels, values, colors, valueSuffix = '', legendS
   const outerR = Math.min(H * 0.46, 118);
   const innerR = outerR * 0.6;
   const cx = W * 0.2, cy = H / 2;
-  const padRad = (2 * Math.PI) / 180; // recharts paddingAngle={2}
+  const padRad = (2 * Math.PI) / 180; 
 
   let angle = -Math.PI / 2;
   values.forEach((v, i) => {
@@ -74,7 +50,7 @@ function donutChartToDataURL({ labels, values, colors, valueSuffix = '', legendS
     angle += sweep;
   });
 
-  // legend
+  
   const legendX0 = W * 0.42;
   const legendX1 = W - 16;
   const rowH = H / labels.length;
@@ -92,7 +68,7 @@ function donutChartToDataURL({ labels, values, colors, valueSuffix = '', legendS
       ctx.fill();
     }
 
-    // label + dot, right-aligned within the row (RTL "start")
+    
     ctx.font = `700 15px ${font}, "Segoe UI", sans-serif`;
     const rightEdge = legendX1 - 14;
     ctx.textAlign = 'right';
@@ -105,7 +81,7 @@ function donutChartToDataURL({ labels, values, colors, valueSuffix = '', legendS
     ctx.fillStyle = color;
     ctx.fill();
 
-    // value
+    
     const valueText = String(values[i]) + valueSuffix;
     ctx.font = `700 15px ${font}, "Segoe UI", sans-serif`;
     if (legendStyle === 'pill') {
@@ -113,9 +89,9 @@ function donutChartToDataURL({ labels, values, colors, valueSuffix = '', legendS
       ctx.textAlign = 'left';
       ctx.fillText(valueText, legendX0 + 14, midY);
     } else {
-      // fixed-width label column on the right (mirrors the widget's
-      // 76px flex-basis), value centered in the remaining space to
-      // its left, colored to match its slice.
+      
+      
+      
       const labelColLeft = rightEdge - Math.max(labelW + 14, W * 0.16);
       ctx.fillStyle = color;
       ctx.textAlign = 'center';
@@ -126,13 +102,6 @@ function donutChartToDataURL({ labels, values, colors, valueSuffix = '', legendS
   return canvas.toDataURL('image/png');
 }
 
-/**
- * Stacked bar chart matching RisksByLevelChartWidget: legend row on
- * top (right-to-left: high, medium, low — so low ends up on the left,
- * matching the widget), axis ticks on the left, month labels on the
- * bottom with the current month bold, rounded pill-like segments with
- * small gaps stacked bottom-up (low, medium, high).
- */
 function stackedBarChartToDataURL({ months, series, currentMonth, font = 'Tajawal' }) {
   const W = CHART_IMG_W, H = CHART_IMG_H;
   const { canvas, ctx } = makeChartCanvas(W, H);
@@ -145,9 +114,9 @@ function stackedBarChartToDataURL({ months, series, currentMonth, font = 'Tajawa
   const plotW = plotRight - plotLeft;
   const plotH = plotBottom - plotTop;
 
-  // legend: reversed series order (high, medium, low) so that in this
-  // right-to-left row the last item (low) lands on the far left —
-  // same as the widget's LEGEND_ITEMS.
+  
+  
+  
   ctx.font = `700 13px ${font}, "Segoe UI", sans-serif`;
   ctx.textBaseline = 'middle';
   let lx = plotRight;
@@ -164,8 +133,8 @@ function stackedBarChartToDataURL({ months, series, currentMonth, font = 'Tajawa
     lx = dotX - 18;
   });
 
-  // ticks (mirrors niceMax(): round up the max monthly total to the
-  // nearest multiple of 3, then quarter it for the 5 gridline labels)
+  
+  
   const totals = months.map((_, i) => series.reduce((sum, s) => sum + (s.values[i] || 0), 0));
   const maxTotal = Math.max(...totals, 0);
   const step = 3;
@@ -180,7 +149,7 @@ function stackedBarChartToDataURL({ months, series, currentMonth, font = 'Tajawa
     ctx.fillText(String(t), plotLeft - 10, y + 4);
   });
 
-  // bars
+  
   const slotW = plotW / months.length;
   const barW = Math.min(30, slotW * 0.46);
   const gap = 3, radius = 5;
@@ -210,27 +179,6 @@ function stackedBarChartToDataURL({ months, series, currentMonth, font = 'Tajawa
 
   return canvas.toDataURL('image/png');
 }
-
-/**
- * -----------------------------------------------------------------------
- * Brand-driven chart palette
- * -----------------------------------------------------------------------
- * Charts use the presentation's actual identity colors — state.primary /
- * secondary / accent from the "الألوان" panel — directly, not a tinted
- * derivative of the old semantic red/orange/green set. Applying a preset
- * (وزاري / هيئة / شركة) or hand-picking colors both just set those same
- * three state fields (see applyPreset() and the color <input> listeners
- * in app.js), so a single code path here covers both: whatever the three
- * swatches currently are, that's what shows up in the charts.
- *
- * The one thing this can't inherit from the brand is *guaranteed
- * distinctness* — primary/secondary/accent are picked for identity, not
- * for being tellable apart in a legend, and a user is free to set two of
- * them to nearly the same color. So each chart's assigned colors are run
- * through ensureDistinguishable(), which nudges lightness (and, as a
- * last resort, hue) just enough that every slice/series stays visually
- * separable, however the three brand colors are set.
- */
 
 function hexToHsl(hex) {
   hex = hex.replace('#', '');
@@ -281,25 +229,13 @@ function hexToRgb(hex) {
   };
 }
 
-// Plain Euclidean RGB distance (0 = identical, ~441 = black vs white).
-// Good enough here: we only need "is this pair too close to tell apart
-// as small legend dots/pie slices", not color-science-grade accuracy.
 function colorDistance(hexA, hexB) {
   const a = hexToRgb(hexA), b = hexToRgb(hexB);
   return Math.sqrt((a.r - b.r) ** 2 + (a.g - b.g) ** 2 + (a.b - b.b) ** 2);
 }
 
-const MIN_SLICE_DISTANCE = 70; // empirically enough to tell two swatches apart at legend-dot size
+const MIN_SLICE_DISTANCE = 70; 
 
-/**
- * Walks a palette in order and nudges any color that's too close to an
- * earlier one in the same chart, so every chart stays legible no matter
- * how similar the user's brand colors are (including all three set to
- * the same color). Hue/identity is preserved as much as possible: first
- * choice is to push lightness away from the crowded value (keeping the
- * same hue family), and only if that alone can't create enough
- * separation — i.e. the colors are near-identical — is hue nudged too.
- */
 function ensureDistinguishable(colorsHex) {
   const hsls = colorsHex.map(hexToHsl);
   for (let i = 1; i < hsls.length; i++) {
@@ -311,13 +247,13 @@ function ensureDistinguishable(colorsHex) {
       );
       if (!clash) break;
       if (guard < 10) {
-        // push lightness away from the middle, alternating direction
-        // each pass, staying clear of near-black/near-white
+        
+        
         const dir = hsls[i].l >= 50 ? 1 : -1;
         hsls[i].l = Math.max(14, Math.min(88, hsls[i].l + dir * (8 + guard)));
       } else {
-        // lightness alone hasn't been enough (near-identical hues) —
-        // nudge hue as a last resort
+        
+        
         hsls[i].h = (hsls[i].h + 35) % 360;
       }
       guard++;
@@ -326,14 +262,6 @@ function ensureDistinguishable(colorsHex) {
   return hsls.map(c => hslToHex(c.h, c.s, c.l));
 }
 
-/**
- * Builds the color list a chart needs (`count` entries) directly out of
- * the brand swatches, in priority order primary -> secondary -> accent.
- * If a chart needs more colors than the brand has (projectStatus needs
- * 4), extra ones are generated as hue-shifted variants of the pool
- * colors so they still feel brand-derived rather than arbitrary.
- * ensureDistinguishable() then guarantees the final set is legible.
- */
 function brandChartPalette(count, brandColors) {
   const pool = [brandColors && brandColors.primary, brandColors && brandColors.secondary, brandColors && brandColors.accent]
     .filter(Boolean);
@@ -352,24 +280,14 @@ function brandChartPalette(count, brandColors) {
   return ensureDistinguishable(raw);
 }
 
-/**
- * Entry point shared by the live preview and the .pptx export: takes
- * one AVAILABLE_CHARTS entry (see config.js) and returns a PNG data
- * URL reproducing its لوحة التحكم widget, colored directly from the
- * current brand palette (see brandChartPalette above).
- *
- * `brandColors` is `{ primary, secondary, accent }` — pass the current
- * state.primary/secondary/accent from the "الألوان" panel (app.js).
- * Omit it (or pass null) to fall back to the chart's built-in colors.
- */
 function renderDashboardChartImage(chart, font, brandColors) {
   if (chart.type === 'doughnut') {
     const d = chart.sampleData[0];
-    // avgProgress is a 2-tone fill/track ring, not a categorical
-    // breakdown — track it to a light tint of the brand primary
-    // (rather than handing the "remaining" slice a full second brand
-    // color, which would read as two competing categories instead of
-    // fill-vs-background) so it still visibly reflects the brand.
+    
+    
+    
+    
+    
     let colors;
     if (chart.id === 'avgProgress' && brandColors && brandColors.primary) {
       const p = hexToHsl(brandColors.primary);

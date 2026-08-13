@@ -209,6 +209,14 @@ export const ADMIN_DEFAULT_ACTIVE_WIDGET_IDS: WidgetId[] = [
   'projects-list',
 ];
 
+export const SENIOR_DEFAULT_ACTIVE_WIDGET_IDS: WidgetId[] = [
+  'total-revenue',
+  'active-tenants',
+  'subscriptions-ending',
+  'project-status-donut',
+  'today-alerts',
+];
+
 export const DEFAULT_ACTIVE_WIDGET_IDS = SUPERADMIN_DEFAULT_ACTIVE_WIDGET_IDS;
 
 export const DEFAULT_LAYOUT: LayoutItem[] = [
