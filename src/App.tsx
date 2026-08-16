@@ -51,6 +51,8 @@ function DashboardPage({ role }: { role: UserRole }) {
     layout,
     setLayout,
     removeWidget,
+    removedWidgetIds,
+    addWidget,
   } = useDashboardState(
     role === 'admin' ? ADMIN_DEFAULT_ACTIVE_WIDGET_IDS : SUPERADMIN_DEFAULT_ACTIVE_WIDGET_IDS,
   );
@@ -78,7 +80,11 @@ function DashboardPage({ role }: { role: UserRole }) {
         </div>
       </div>
       {isEditMode && (
-        <WidgetLibraryPanel onClose={() => setIsEditMode(false)} />
+        <WidgetLibraryPanel
+          onClose={() => setIsEditMode(false)}
+          removedWidgetIds={removedWidgetIds}
+          onAddWidget={addWidget}
+        />
       )}
     </div>
   );

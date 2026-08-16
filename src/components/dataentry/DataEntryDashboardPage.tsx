@@ -16,6 +16,8 @@ export function DataEntryDashboardPage() {
     layout,
     setLayout,
     removeWidget,
+    removedWidgetIds,
+    addWidget,
   } = useDashboardState(ADMIN_DEFAULT_ACTIVE_WIDGET_IDS);
 
   return (
@@ -46,7 +48,13 @@ export function DataEntryDashboardPage() {
           />
         </div>
       </div>
-      {isEditMode && <WidgetLibraryPanel onClose={() => setIsEditMode(false)} />}
+      {isEditMode && (
+        <WidgetLibraryPanel
+          onClose={() => setIsEditMode(false)}
+          removedWidgetIds={removedWidgetIds}
+          onAddWidget={addWidget}
+        />
+      )}
     </div>
   );
 }
