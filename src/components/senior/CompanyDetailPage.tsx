@@ -191,8 +191,12 @@ export function CompanyDetailPage({
         <div className="cd-main-card">
           
           <div className="cd-intro">
-            <span className={`cd-logo ${company.logoClass}`}>
-              {company.logoText}
+            <span className={`cd-logo ${company.logoImage ? 'cd-logo--img' : company.logoClass}`}>
+              {company.logoImage ? (
+                <img src={company.logoImage} alt={name} className="cd-logo-img" loading="lazy" />
+              ) : (
+                company.logoText
+              )}
             </span>
             <div>
               <h2 className="cd-company-name">{name}</h2>

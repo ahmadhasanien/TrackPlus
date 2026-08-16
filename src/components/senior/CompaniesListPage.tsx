@@ -112,9 +112,18 @@ export function CompaniesListPage({
                 
                 <div className="sc-company-cell">
                   <span className="sc-logo-box">
-                    <span className={`sc-logo-text ${company.logoClass}`}>
-                      {company.logoText}
-                    </span>
+                    {company.logoImage ? (
+                      <img
+                        src={company.logoImage}
+                        alt={company.name}
+                        className="sc-logo-img"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <span className={`sc-logo-text ${company.logoClass}`}>
+                        {company.logoText}
+                      </span>
+                    )}
                   </span>
                   <div className="sc-company-info">
                     <p className="sc-company-name">{company.name}</p>

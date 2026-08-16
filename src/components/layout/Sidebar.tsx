@@ -1,7 +1,8 @@
 import { type ReactElement, useEffect, useRef, useState } from 'react';
-import { LogOut, MoreVertical, Search } from 'lucide-react';
+import { LogOut, MoreVertical, Search, UserPlus } from 'lucide-react';
 import { navItems, userProfile } from '../../data/mockDashboard';
 import type { UserRole } from '../../types/auth';
+import { AddUserModal } from '../ui/AddUserModal';
 import logoFull from '../../assets/logo-full.png';
 import {
   AuditLogIcon,
@@ -121,8 +122,10 @@ function SignOutModal({ onConfirm, onCancel }: SignOutModalProps) {
 export function Sidebar({ role, activePage, onNavigate, onSignOut, profile, settingsActive = false, onSettings }: SidebarProps) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showSignOutModal, setShowSignOutModal] = useState(false);
+  const [showAddUserModal, setShowAddUserModal] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const moreButtonRef = useRef<HTMLButtonElement>(null);
+  const canAddUser = role === 'superadmin' || role === 'senior_management';
 
   const items: SuperadminNavItem[] =
     role === 'superadmin'
@@ -153,6 +156,11 @@ export function Sidebar({ role, activePage, onNavigate, onSignOut, profile, sett
   const handleSignOutClick = () => {
     setDropdownOpen(false);
     setShowSignOutModal(true);
+  };
+
+  const handleAddUserClick = () => {
+    setDropdownOpen(false);
+    setShowAddUserModal(true);
   };
 
   const handleConfirmSignOut = () => {
@@ -242,6 +250,17 @@ export function Sidebar({ role, activePage, onNavigate, onSignOut, profile, sett
                   role="menu"
                   aria-label="خيارات المستخدم"
                 >
+                  {canAddUser && (
+                    <button
+                      type="button"
+                      role="menuitem"
+                      className="profile-dropdown__item"
+                      onClick={handleAddUserClick}
+                    >
+                      <UserPlus size={15} strokeWidth={2} aria-hidden />
+                      <span>اضافة مستخدم</span>
+                    </button>
+                  )}
                   <button
                     type="button"
                     role="menuitem"
@@ -270,6 +289,10 @@ export function Sidebar({ role, activePage, onNavigate, onSignOut, profile, sett
           onConfirm={handleConfirmSignOut}
           onCancel={() => setShowSignOutModal(false)}
         />
+      )}
+
+      {showAddUserModal && (
+        <AddUserModal onClose={() => setShowAddUserModal(false)} />
       )}
     </>
   );

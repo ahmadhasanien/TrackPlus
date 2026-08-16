@@ -1,3 +1,11 @@
+import logoJodayn from "../assets/company-logos/jodayn.png";
+import logoNafidh from "../assets/company-logos/nafidh.png";
+import logoRawasi from "../assets/company-logos/rawasi.png";
+import logoMasar from "../assets/company-logos/masar.png";
+import logoDherwa from "../assets/company-logos/dherwa.png";
+import logoWasl from "../assets/company-logos/wasl.png";
+import logoManara from "../assets/company-logos/manara.png";
+
 export type CompanyStatus = "on-track" | "delayed";
 
 export type Company = {
@@ -9,6 +17,7 @@ export type Company = {
   status: CompanyStatus;
   logoText: string;
   logoClass: string;
+  logoImage?: string;
 };
 
 export const companies: Company[] = [
@@ -21,6 +30,7 @@ export const companies: Company[] = [
     status: "on-track",
     logoText: "جودين",
     logoClass: "text-success",
+    logoImage: logoJodayn,
   },
   {
     id: "nafidh",
@@ -31,6 +41,7 @@ export const companies: Company[] = [
     status: "delayed",
     logoText: "نافذ",
     logoClass: "text-foreground",
+    logoImage: logoNafidh,
   },
   {
     id: "rawasi",
@@ -41,6 +52,7 @@ export const companies: Company[] = [
     status: "on-track",
     logoText: "رواسي",
     logoClass: "text-info-foreground",
+    logoImage: logoRawasi,
   },
   {
     id: "masar",
@@ -51,6 +63,7 @@ export const companies: Company[] = [
     status: "on-track",
     logoText: "مسار",
     logoClass: "text-muted-foreground",
+    logoImage: logoMasar,
   },
   {
     id: "dherwa",
@@ -61,6 +74,7 @@ export const companies: Company[] = [
     status: "delayed",
     logoText: "ذروة",
     logoClass: "text-warning-foreground",
+    logoImage: logoDherwa,
   },
   {
     id: "wasl",
@@ -71,6 +85,7 @@ export const companies: Company[] = [
     status: "delayed",
     logoText: "وصل",
     logoClass: "text-foreground",
+    logoImage: logoWasl,
   },
   {
     id: "manara",
@@ -81,6 +96,7 @@ export const companies: Company[] = [
     status: "on-track",
     logoText: "منارة",
     logoClass: "text-foreground",
+    logoImage: logoManara,
   },
   {
     id: "itqan",
