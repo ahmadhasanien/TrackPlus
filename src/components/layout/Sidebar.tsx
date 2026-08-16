@@ -3,6 +3,7 @@ import { LogOut, MoreVertical, Search, UserPlus } from 'lucide-react';
 import { navItems, userProfile } from '../../data/mockDashboard';
 import type { UserRole } from '../../types/auth';
 import { AddUserModal } from '../ui/AddUserModal';
+import { FeedbackBanner, type BannerTone } from '../ui/FeedbackBanner';
 import logoFull from '../../assets/logo-full.png';
 import {
   AuditLogIcon,
@@ -123,6 +124,7 @@ export function Sidebar({ role, activePage, onNavigate, onSignOut, profile, sett
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [showSignOutModal, setShowSignOutModal] = useState(false);
   const [showAddUserModal, setShowAddUserModal] = useState(false);
+  const [addUserBanner, setAddUserBanner] = useState<BannerTone | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const moreButtonRef = useRef<HTMLButtonElement>(null);
   const canAddUser = role === 'superadmin' || role === 'senior_management';
@@ -175,6 +177,13 @@ export function Sidebar({ role, activePage, onNavigate, onSignOut, profile, sett
 
   return (
     <>
+      {addUserBanner && (
+        <div className="sidebar__toast-banner" dir="rtl">
+          <FeedbackBanner tone={addUserBanner} onClose={() => setAddUserBanner(null)}>
+            {addUserBanner === 'success' ? 'تم إضافة المستخدم بنجاح' : 'يرجى تعبئة جميع البيانات بشكل صحيح'}
+          </FeedbackBanner>
+        </div>
+      )}
       <aside className="sidebar" dir="rtl">
         <div className="sidebar__logo">
           <img src={logoFull} alt="track+" className="sidebar__logo-full" />
@@ -292,7 +301,11 @@ export function Sidebar({ role, activePage, onNavigate, onSignOut, profile, sett
       )}
 
       {showAddUserModal && (
-        <AddUserModal onClose={() => setShowAddUserModal(false)} />
+        <AddUserModal
+          onClose={() => setShowAddUserModal(false)}
+          onSubmit={() => setAddUserBanner('success')}
+          onError={() => setAddUserBanner('error')}
+        />
       )}
     </>
   );

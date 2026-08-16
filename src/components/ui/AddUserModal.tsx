@@ -6,9 +6,10 @@ export type AddUserModalRole = 'إدارة عليا' | 'مدخل بيانات';
 interface AddUserModalProps {
   onClose: () => void;
   onSubmit?: (user: { name: string; email: string; department: string; role: AddUserModalRole }) => void;
+  onError?: () => void;
 }
 
-export function AddUserModal({ onClose, onSubmit }: AddUserModalProps) {
+export function AddUserModal({ onClose, onSubmit, onError }: AddUserModalProps) {
   const [newUser, setNewUser] = useState({
     name: '',
     email: '',
@@ -25,6 +26,7 @@ export function AddUserModal({ onClose, onSubmit }: AddUserModalProps) {
 
     if (!name || !email || !department || !role || !emailIsValid) {
       onClose();
+      onError?.();
       return;
     }
 
