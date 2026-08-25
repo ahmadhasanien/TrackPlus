@@ -1,11 +1,11 @@
 
 
-import goalsIconSrc from '../../assets/icons/goals.png';
-import projectsIconSrc from '../../assets/icons/projects.png';
-import companiesIconSrc from '../../assets/icons/companies.png';
-import departmentsIconSrc from '../../assets/icons/departments.png';
-import settingsIconSrc from '../../assets/icons/settings.png';
-import tenantsIconSrc from '../../assets/icons/tenants/tenants-menu.png';
+import goalsIconSrc from '../../assets/navigation/goals.png';
+import projectsIconSrc from '../../assets/navigation/projects.png';
+import companiesIconSrc from '../../assets/navigation/companies.png';
+import departmentsIconSrc from '../../assets/navigation/departments.png';
+import settingsIconSrc from '../../assets/navigation/settings.png';
+import tenantsIconSrc from '../../assets/tenants/tenants-menu.png';
 
 export function DashboardIcon() {
   return (

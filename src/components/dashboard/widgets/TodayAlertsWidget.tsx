@@ -1,19 +1,24 @@
 import type { ReactNode } from 'react';
-import { AlertTriangle, Clock } from 'lucide-react';
+import { Clock } from 'lucide-react';
 import { Card } from '../../ui/Card';
 import { todayAlerts } from '../../../data/mockDashboard';
 import type { AlertType } from '../../../data/mockDashboard';
-import approvalIconSrc from '../../../assets/icons/approval.png';
+import approvalIconSrc from '../../../assets/dashboard/approval.png';
+import riskIconSrc from '../../../assets/dashboard/risk.png';
 
 function ApprovalIcon({ size = 20 }: { size?: number }) {
   return <img src={approvalIconSrc} alt="" width={size} height={size} />;
+}
+
+function RiskIcon({ size = 20 }: { size?: number }) {
+  return <img src={riskIconSrc} alt="" width={size} height={size} />;
 }
 
 type AlertIconComponent = (props: { size?: number }) => ReactNode;
 
 const alertIcons: Record<AlertType, AlertIconComponent> = {
   deliverable: Clock,
-  risk: AlertTriangle,
+  risk: RiskIcon,
   approval: ApprovalIcon,
 };
 

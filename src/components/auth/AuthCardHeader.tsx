@@ -1,4 +1,4 @@
-import logoMark from '../../assets/logo-mark.png';
+import logoMark from '../../assets/brand/logo-mark.png';
 
 export function AuthCardHeader() {
   return (

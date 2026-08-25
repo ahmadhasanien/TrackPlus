@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { KeyboardEvent, ReactNode } from 'react';
 import { Copy, Upload } from 'lucide-react';
-import assistantIcon from '../../assets/assistant/assistant-icon.png';
+import assistantIcon from '../../assets/dashboard/assistant-icon.png';
 import '../assistant/assistant.css';
 
 interface Suggestion {
@@ -103,6 +103,8 @@ export function SeniorAIAssistantPanel() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
+
+
 
   function openPanel() {
     setIsOpen(true);

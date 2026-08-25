@@ -1,0 +1,89 @@
+.wave-loop-viewport {
+  width: 100%;
+  /* Match landwave.svg's native 1440x792 ratio exactly, instead of a
+     fixed `height: 55vh`. A fixed vh height let the container's aspect
+     ratio drift away from the artwork's own aspect ratio on wide
+     screens, which forced `object-fit: cover` to scale the image up
+     until it filled the width — cropping off most of the top of the
+     drawing. Sizing the container by aspect-ratio means the full
+     width-to-height artwork always fits exactly, so nothing is ever
+     cropped, top or bottom. */
+  aspect-ratio: 1440 / 792;
+  /* No max-height cap here on purpose: capping height while width stays
+     100% would re-introduce a width:height mismatch on wide screens
+     (exactly the mismatch that caused the cropping in the first place),
+     since the aspect-ratio could no longer be honored once height hits
+     the cap. Letting height float with aspect-ratio guarantees the full
+     artwork is always visible at any viewport width. */
+  /* Isolate from any ancestor `dir="rtl"` (e.g. DemoRequestPage): without
+     this, flex children below would mirror order under RTL and break the
+     translate math, which was the root cause of the leak-off-screen bug. */
+  direction: ltr;
+}
+
+.wave-loop-track {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.wave-loop-img {
+  /* Now that .wave-loop-viewport's aspect-ratio matches the SVG's own
+     1440x792 ratio exactly, width:100%/height:100% requires no cropping
+     at all — object-fit is just a safety net, not doing any real work. */
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  will-change: transform;
+  animation-duration: 14s;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+
+/* Copy 1: starts in place (0%), exits fully to the left (-100%). */
+.wave-loop-img--copy1 {
+  transform: translate3d(0%, 0, 0);
+  animation-name: waveLoopCopy1Leftward;
+}
+
+/* Copy 2: starts pre-positioned one full width to the right (+100%,
+   i.e. off-screen), slides in to settle at 0% exactly as copy 1 exits. */
+.wave-loop-img--copy2 {
+  transform: translate3d(100%, 0, 0);
+  animation-name: waveLoopCopy2Leftward;
+}
+
+@keyframes waveLoopCopy1Leftward {
+  0% {
+    transform: translate3d(0%, 0, 0);
+  }
+  100% {
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+@keyframes waveLoopCopy2Leftward {
+  0% {
+    transform: translate3d(100%, 0, 0);
+  }
+  100% {
+    transform: translate3d(0%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wave-loop-img {
+    animation: none;
+  }
+
+  .wave-loop-img--copy2 {
+    /* Freeze on the static (no-motion) resting frame instead of the
+       off-screen starting position. */
+    transform: translate3d(0%, 0, 0);
+  }
+}

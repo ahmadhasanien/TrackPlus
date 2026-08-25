@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { KeyboardEvent, ReactNode } from 'react';
 import { Copy, Upload } from 'lucide-react';
-import assistantIcon from '../../assets/assistant/assistant-icon.png';
+import assistantIcon from '../../assets/dashboard/assistant-icon.png';
 import { userProfile } from '../../data/mockDashboard';
 import './assistant.css';
 

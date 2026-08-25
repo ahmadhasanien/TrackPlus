@@ -1,5 +1,5 @@
 import { useEffect, useRef, type ReactNode } from 'react';
-import closeCircleIcon from '../../assets/icons/vuesax/linear/close-circle.svg';
+import closeCircleIcon from '../../assets/common/close-circle.svg';
 import './ui.css';
 
 interface WidgetWrapperProps {

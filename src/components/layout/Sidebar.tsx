@@ -4,7 +4,7 @@ import { navItems, userProfile } from '../../data/mockDashboard';
 import type { UserRole } from '../../types/auth';
 import { AddUserModal } from '../ui/AddUserModal';
 import { FeedbackBanner, type BannerTone } from '../ui/FeedbackBanner';
-import logoFull from '../../assets/logo-full.png';
+import logoFull from '../../assets/brand/logo-full.png';
 import {
   AuditLogIcon,
   CompaniesIcon,

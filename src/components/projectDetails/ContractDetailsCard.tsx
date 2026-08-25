@@ -1,7 +1,7 @@
 import React from 'react';
-import { FileText } from 'lucide-react';
 import DetailCardHeader from './DetailCardHeader';
 import type { ContractDetails } from '../../types/projectDetails';
+import { projectsAssets } from '../../assets';
 
 export interface ContractDetailsCardProps {
   details: ContractDetails;
@@ -25,7 +25,10 @@ const ContractDetailsCard: React.FC<ContractDetailsCardProps> = ({ details }) =>
 
   return (
     <div className="project-detail__card project-detail__contract-card" dir="rtl">
-      <DetailCardHeader title="تفاصيل العقد" icon={<FileText size={22} />} />
+      <DetailCardHeader
+        title="تفاصيل العقد"
+        icon={<img src={projectsAssets.contract} alt="" style={{ width: '100%', height: '100%' }} />}
+      />
       <div className="project-detail__contract-grid">
         <Field label="رقم العقد">{details.contractNumber}</Field>
         <Field label="تاريخ التوقيع">{details.signDate}</Field>

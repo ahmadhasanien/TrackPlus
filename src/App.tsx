@@ -37,11 +37,12 @@ import {
   ADMIN_DEFAULT_ACTIVE_WIDGET_IDS,
   SUPERADMIN_DEFAULT_ACTIVE_WIDGET_IDS,
 } from './config/widgets';
+import { LandingPage } from './components/landing/LandingPage';
 import './components/layout/layout.css';
 import './components/dashboard/dashboard.css';
 import './styles/global.css';
 
-type AuthStep = 'login' | 'forgot-password' | 'otp' | 'authenticating' | 'authenticated';
+type AuthStep = 'landing' | 'login' | 'forgot-password' | 'otp' | 'authenticating' | 'authenticated';
 
 function DashboardPage({ role }: { role: UserRole }) {
   const {
@@ -98,8 +99,12 @@ function App() {
   const [dataEntryActivePage, setDataEntryActivePage] = useState<DataEntryPageId>('dashboard');
   const [selectedDataEntryDepartment, setSelectedDataEntryDepartment] = useState<DataEntryDepartment | null>(null);
   const [dataEntryDepartmentDeleted, setDataEntryDepartmentDeleted] = useState(false);
-  const [authStep, setAuthStep] = useState<AuthStep>('login');
+  const [authStep, setAuthStep] = useState<AuthStep>('landing');
   const [role, setRole] = useState<UserRole>('superadmin');
+
+  if (authStep === 'landing') {
+    return <LandingPage onLoginClick={() => setAuthStep('login')} />;
+  }
 
   if (authStep === 'login') {
     return (

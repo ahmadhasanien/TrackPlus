@@ -1,5 +1,5 @@
 import { AuthBackground } from './AuthBackground';
-import logoMark from '../../assets/logo-mark.png';
+import logoMark from '../../assets/brand/logo-mark.png';
 import './auth.css';
 
 interface LoadingScreenProps {

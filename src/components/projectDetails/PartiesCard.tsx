@@ -1,6 +1,6 @@
 import React from 'react';
-import { Users } from 'lucide-react';
 import DetailCardHeader from './DetailCardHeader';
+import { projectsAssets } from '../../assets';
 
 export interface ProjectParty {
   role: string;
@@ -48,7 +48,10 @@ const PartyRow: React.FC<{ party: ProjectParty; isLast: boolean }> = ({ party, i
 const PartiesCard: React.FC<PartiesCardProps> = ({ parties }) => {
   return (
     <div className="project-detail__card project-detail__parties-card" dir="rtl">
-      <DetailCardHeader title="أطراف المشروع" icon={<Users size={22} />} />
+      <DetailCardHeader
+        title="أطراف المشروع"
+        icon={<img src={projectsAssets.team} alt="" style={{ width: '100%', height: '100%' }} />}
+      />
       <div className="flex flex-col">
         {parties.map((party, index) => (
           <PartyRow key={party.role} party={party} isLast={index === parties.length - 1} />

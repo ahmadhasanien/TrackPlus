@@ -1,7 +1,8 @@
 import React from 'react';
-import { WalletCards, CalendarDays, Landmark, ClipboardList } from 'lucide-react';
+import { CalendarDays, Landmark, ClipboardList } from 'lucide-react';
 import DetailCardHeader from './DetailCardHeader';
 import type { BudgetDetails } from '../../types/projectDetails';
+import { projectsAssets } from '../../assets';
 
 export interface BudgetDetailsCardProps {
   details: BudgetDetails;
@@ -29,7 +30,10 @@ const BudgetDetailsCard: React.FC<BudgetDetailsCardProps> = ({ details }) => {
 
   return (
     <div className="project-detail__card project-detail__budget-summary-card" dir="rtl">
-      <DetailCardHeader title="الميزانية" icon={<WalletCards size={22} />} />
+      <DetailCardHeader
+        title="الميزانية"
+        icon={<img src={projectsAssets.budget} alt="" style={{ width: '100%', height: '100%' }} />}
+      />
       <Row label="المصروف" value={spent} icon={<CalendarDays size={18} />} />
       <Row label="المتبقي" value={remaining} icon={<Landmark size={18} />} />
       <Row label="الميزانية الإجمالية" value={total} icon={<ClipboardList size={18} />} total />
