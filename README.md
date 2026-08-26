@@ -1,4 +1,4 @@
-TrackPlus
+TrackPlus:
 A multi-tenant project analytics and management dashboard built with React 19, TypeScript, and Vite. TrackPlus supports four distinct user roles — Admin, Superadmin, Senior Management, and Data Entry — each with its own layout, navigation, and set of pages, backed by a shared component and data layer.
 Live demo: track-plus-omega.vercel.app
 Features
